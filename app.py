@@ -94,15 +94,3 @@ gr.Interface(fn=predict,
              inputs=gr.Image(type="pil"),
              outputs=gr.Image(type="pil")
              ).launch(share=True)
-# def greet(name):
-    # return "Hello " + name + "!!"
-# 
-# iface = gr.Interface(fn=greet, inputs="text", outputs="text")
-# iface.launch()
-    # fn=predict,
-    # inputs=["image"],
-    # outputs=[gr.outputs.Image(type="pil", label="RetinaNet Inference")],
-    # title="Fridge Object Detector",
-    # description="A VFNet model that detects common objects found in fridge. Upload an image or click an example image below to use.",
-# )
-# 
