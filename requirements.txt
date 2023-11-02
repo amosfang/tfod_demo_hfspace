@@ -1,0 +1,5 @@
+#tf2-tensorflow-object-detection-api
+tf-models-research-object-detection
+matplotlib
+wget
+Pillow==9.5
