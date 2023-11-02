@@ -9,33 +9,19 @@ from object_detection.utils import ops as utils_op
 import tarfile
 import wget 
 import gradio as gr
-import PIL
-import gradio as gr
+
 
 PATH_TO_LABELS = 'data/label_map.pbtxt'   
 category_index = label_map_util.create_category_index_from_labelmap(PATH_TO_LABELS, use_display_name=True)
 
 def pil_image_as_numpy_array(pilimg):
 
-    (im_width, im_height) = pilimg.size
+    img_array = tf.keras.utils.img_to_array(pilimg)
+    img_array = np.expand_dims(img_array, axis=0)
+    return img_array
     
-    return np.array(pilimg.getdata())[:,:3].reshape(
-        (1, im_height, im_width, 3)).astype(np.uint8)
-    
-
 def load_image_into_numpy_array(path):
-    """Load an image from file into a numpy array.
-
-    Puts image into numpy array to feed into tensorflow graph.
-    Note that by convention we put it into a numpy array with shape
-    (height, width, channels), where channels=3 for RGB.
-
-    Args:
-    path: the file path to the image
-
-    Returns:
-    uint8 numpy array with shape (img_height, img_width, 3)
-    """
+                                    
     image = None
     image_data = tf.io.gfile.GFile(path, 'rb').read()
     image = Image.open(BytesIO(image_data))
