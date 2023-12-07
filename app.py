@@ -9,7 +9,8 @@ from object_detection.utils import ops as utils_op
 import tarfile
 import wget 
 import gradio as gr
-
+from huggingface_hub import snapshot_download
+import os 
 
 PATH_TO_LABELS = 'data/label_map.pbtxt'   
 category_index = label_map_util.create_category_index_from_labelmap(PATH_TO_LABELS, use_display_name=True)
@@ -28,6 +29,12 @@ def load_image_into_numpy_array(path):
     return pil_image_as_numpy_array(image)            
 
 def load_model():
+    download_dir = snapshot_download(REPO_ID)
+    saved_model_dir = os.path.join(download_dir, "saved_model")
+    detection_model = tf.saved_model.load(saved_model_dir)
+    return detection_model
+
+def load_model2():
     wget.download("https://nyp-aicourse.s3-ap-southeast-1.amazonaws.com/pretrained-models/balloon_model.tar.gz")
     tarfile.open("balloon_model.tar.gz").extractall()
     model_dir = 'saved_model'    
@@ -69,6 +76,8 @@ def predict2(image_np):
     
     return result_pil_img
 
+
+REPO_ID = "khengkok/mkktfodmodel"
 detection_model = load_model()
 # pil_image = Image.open(image_path)
 # image_arr = pil_image_as_numpy_array(pil_image)
