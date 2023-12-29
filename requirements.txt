@@ -1,6 +1,10 @@
 #tf2-tensorflow-object-detection-api
+tensorflow>=2.7.0
+tensorflow-addons>=0.15.0
 tf-models-research-object-detection
+six
 matplotlib
 wget
 Pillow==9.5
 huggingface_hub
+

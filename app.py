@@ -18,7 +18,7 @@ category_index = label_map_util.create_category_index_from_labelmap(PATH_TO_LABE
 def pil_image_as_numpy_array(pilimg):
 
     img_array = tf.keras.utils.img_to_array(pilimg)
-    img_array = np.expand_dims(img_array, axis=0)
+    # img_array = np.expand_dims(img_array, axis=0)
     return img_array
     
 def load_image_into_numpy_array(path):
@@ -29,29 +29,16 @@ def load_image_into_numpy_array(path):
     return pil_image_as_numpy_array(image)            
 
 def load_model():
-    download_dir = snapshot_download(REPO_ID)
-    saved_model_dir = os.path.join(download_dir, "saved_model")
-    detection_model = tf.saved_model.load(saved_model_dir)
-    return detection_model
-
-def load_model2():
-    wget.download("https://nyp-aicourse.s3-ap-southeast-1.amazonaws.com/pretrained-models/balloon_model.tar.gz")
-    tarfile.open("balloon_model.tar.gz").extractall()
     model_dir = 'saved_model'    
     detection_model = tf.saved_model.load(str(model_dir))
     return detection_model    
 
-# samples_folder = 'test_samples
-# image_path = 'test_samples/sample_balloon.jpeg
-# 
 
-def predict(pilimg):
-
-    image_np = pil_image_as_numpy_array(pilimg)
-    return predict2(image_np)
-
-def predict2(image_np):
-
+def predict(image_np):
+    
+    image_np = pil_image_as_numpy_array(image_np)
+    image_np = np.expand_dims(image_np, axis=0)
+    
     results = detection_model(image_np)
 
     # different object detection models have additional results
@@ -76,16 +63,29 @@ def predict2(image_np):
     
     return result_pil_img
 
-
-REPO_ID = "khengkok/mkktfodmodel"
+# def predict2(pilimg):
+#     image = None
+#     image = load_image_into_numpy_array(pilimg)
+#     return predict(image)
+    
 detection_model = load_model()
-# pil_image = Image.open(image_path)
-# image_arr = pil_image_as_numpy_array(pil_image)
 
-# predicted_img = predict(image_arr)
-# predicted_img.save('predicted.jpg')
+# Specify paths to example images
+sample_images = [["test_1.jpg"],["test_9.jpg"],["test_6.jpg"],["test_7.jpg"],
+                 ["test_10.jpg"], ["test_11.jpg"],["test_8.jpg"]]
 
-gr.Interface(fn=predict,
-             inputs=gr.Image(type="pil"),
-             outputs=gr.Image(type="pil")
-             ).launch(share=True)
+# Create a list of example inputs and outputs using a for loop
+# example_inputs = [Image.open(image) for image in sample_images]
+# example_outputs = [predict(input_image) for input_image in example_inputs]
+
+# Save the example output image
+# example_outputs[0].save("/home/user/app/predicted_1.jpg")
+
+iface = gr.Interface(fn=predict,
+                     inputs=gr.Image(label='Upload an expressway image', type="pil"),
+                     outputs=gr.Image(type="pil"),
+                     title='Blue and Yellow Taxi detection in live expressway traffic conditions (data.gov.sg)',
+                     examples = sample_images
+                    )
+
+iface.launch(share=True)

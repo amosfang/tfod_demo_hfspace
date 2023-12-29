@@ -1,4 +1,8 @@
 item {
     id: 1
-    name: 'balloon'
+    name: 'blue taxi'
+}
+item {
+    id: 2
+    name: 'yellow taxi'
 }
